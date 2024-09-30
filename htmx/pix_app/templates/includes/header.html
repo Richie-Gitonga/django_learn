@@ -1,3 +1,4 @@
+{% load static %}
 <header
   x-data="{ mobilenavOpen: false }"
   class="md:flex items-center justify-between [&>*]:px-8 bg-gray-800 h-20 text-white sticky top-0 z-40"
@@ -6,8 +7,8 @@
     <logo>
       <a class="flex items-center gap-1" href="/">
         <img
-          class="w-7 -mt-1"
-          src="https://img.icons8.com/small/64/ffffff/fire-heart.png"
+          class="w-6 mr-2 -mt-1"
+          src="{% static 'images/fireheart_white.svg' %}"
         />
         <span class="text-lg font-bold">Awesome</span>
       </a>
@@ -42,7 +43,8 @@
     <ul
       class="flex items-center navitems flex-col md:flex-row gap-8 md:gap-0 justify-center h-full -translate-y-10 md:translate-y-0"
     >
-      <li><a href="/">Home</a></li>
+      {% if user.is_authenticated %}
+        <li><a href="/">Home</a></li>
       <li><a href="{% url 'post-create' %}">Create Post</a></li>
       <li x-data="{ dropdownOpen: false }" class="relative">
         <a
@@ -54,7 +56,7 @@
             class="h-8 w-8 rounded-full object-cover"
             src="https://pbs.twimg.com/profile_images/508601156767997952/fFTdKUf2_400x400.jpeg"
           />
-          Bart
+          {{ user.username }}
           <img
             x-bind:class="dropdownOpen && 'rotate-180 duration-300'"
             class="w-4"
@@ -70,12 +72,17 @@
           x-transition:enter-end="opacity-100 translate-y-0 scale-100"
         >
           <ul class="hoverlist [&>li>a]:justify-end">
-            <li><a href="">My Profile</a></li>
-            <li><a href="">Edit Profile</a></li>
-            <li><a href="">Log Out</a></li>
+            <li><a href="{% url 'profile' %}">My Profile</a></li>
+            <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
+            <li><a href="{% url 'account_logout' %}">Log Out</a></li>
           </ul>
         </div>
       </li>
+      {% else %}
+        <li><a href="{% url 'account_login' %}">Login</a></li>
+        <li><a href="{% url 'account_signup' %}">signup</a></li>
+      {% endif %}
+      
     </ul>
   </nav>
 </header>

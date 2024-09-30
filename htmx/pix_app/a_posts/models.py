@@ -20,6 +20,7 @@ class Post(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
+    image = models.FileField(upload_to='icons/', null=True, blank=True)
     slug = models.SlugField(max_length=50, unique=True)
 
     def __str__(self):
