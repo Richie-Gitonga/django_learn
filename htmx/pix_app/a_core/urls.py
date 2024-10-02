@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-from a_posts.views import home_view, post_create_view, post_delete_view, post_update_view, post_page_view
-from a_users.views import profile_view, profile_edit_view
+from a_posts.views import home_view, post_create_view, post_delete_view, post_update_view, post_page_view, comment_create_view
+from a_users.views import profile_view, profile_edit_view, profile_delete_view
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -14,8 +14,11 @@ urlpatterns = [
     path('post/edit/<pk>/', post_update_view, name='post-edit'),
     path('post/<pk>/', post_page_view, name='post'),
     path('category/<tag>/', home_view, name='category'),
-    path('profile', profile_view, name='profile'),
-    path('profile/edit/', profile_edit_view, name='profile-edit')
+    path('profile/', profile_view, name='profile'),
+    path('<username>/', profile_view, name='userprofile'),
+    path('profile/edit/', profile_edit_view, name='profile-edit'),
+    path('profile/delete/', profile_delete_view, name='profile-delete'),
+    path('comment/create/<pk>/', comment_create_view, name='comment-create')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
