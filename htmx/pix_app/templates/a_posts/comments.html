@@ -58,7 +58,9 @@
         1
       </div>
       <a href="">Like</a>
-      <a href="">Delete</a>
+      {% if comment.author == request.user %}
+      <a href="{% url 'comment-delete' comment.id %}">Delete</a>
+      {% endif %}
     </div>
 
     <div
@@ -91,7 +93,7 @@
             1
           </div>
           <a href="">Like</a>
-          <a href="">Delete</a>
+          <a href="{% url 'comment-delete' comment.id %}">Delete</a>
         </div>
       </reply>
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Post,Tag
+from .models import Post, Tag, Comment
 from .forms import PostCreateForm, PostUpdateForm, CommentCreateForm
 from bs4 import BeautifulSoup
 import requests
@@ -105,3 +105,14 @@ def comment_create_view(request, pk):
             comment.save()
 
     return redirect('post', post.id)
+
+@login_required
+def comment_delete_view(request, pk):
+    comment = get_object_or_404(Comment, id=pk, author=request.user)
+
+    if request.method == 'POST':
+        comment.delete()
+        messages.success(request, 'Comment deleted')
+        return redirect('post', comment.parent_post.id)
+    
+    return render(request, 'a_posts/comment_delete.html', {'comment': comment})
