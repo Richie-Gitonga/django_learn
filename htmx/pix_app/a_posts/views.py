@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.contrib import messages
 from .models import Post, Tag, Comment, Reply
 from .forms import PostCreateForm, PostUpdateForm, CommentCreateForm, ReplyCreateForm
@@ -145,3 +146,16 @@ def reply_delete_view(request, pk):
     
     return render(request, 'a_posts/reply_delete.html', {'reply': reply})
 
+
+@login_required
+def like_post_view(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    user_exists = post.likes.filter(username=request.user.username).exists()
+
+    if post.author != request.user:
+        if user_exists:
+            post.likes.remove(request.user)
+        else:
+            post.likes.add(request.user)
+
+    return render(request, 'snippets/likes.html', {'post': post})
