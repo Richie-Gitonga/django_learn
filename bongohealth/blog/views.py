@@ -4,10 +4,16 @@ from django.views.decorators.http import require_POST
 from .models import Post
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from .forms import EmailPostForm, CommentForm
+from taggit.models import Tag
 
 # Create your views here.
-def post_list(request):
+def post_list(request, tag_slug=None):
     post_list = Post.published.all()
+    tag = None
+
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        post_list = post_list.filter(tags__in=[tag])
     #paginator with 5 posts per page
     # TODO: change to 12 for future semantic viewing
 
@@ -25,7 +31,10 @@ def post_list(request):
     return render(
         request,
         'blog/post/list.html',
-        {'posts': posts}
+        {
+            'posts': posts,
+            'tag': tag,
+        }
     )
 
 def post_detail(request, year, month, day, post):

@@ -1,4 +1,5 @@
 from django.conf import settings
+from taggit.managers import TaggableManager
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -42,6 +43,7 @@ class Post(models.Model):
         default=Status.DRAFT
     )
 
+    tags = TaggableManager()
     objects = models.Manager() #default manager
     published = PublishManager() #custom manager
     class Meta:
