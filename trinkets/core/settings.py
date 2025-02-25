@@ -1,4 +1,6 @@
+from decouple import config
 from pathlib import Path
+from datetime import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +15,8 @@ SECRET_KEY = 'django-insecure-628-+!8rbeipk*hx)94-nxxtvy)_gfdk)9rq)de!*^va90d12l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['d40e-102-209-76-53.ngrok-free.app', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://d40e-102-209-76-53.ngrok-free.app']
 
 
 # Application definition
@@ -28,6 +31,8 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'shop.apps.ShopConfig',
+    'payments.apps.PaymentsConfig',
+    'coupons.apps.CouponsConfig'
 ]
 
 MIDDLEWARE = [
@@ -108,6 +113,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -120,3 +126,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CART_SESSION_ID = 'cart'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# safaricom mpesa api keys
+CONSUMER_KEY = config('CONSUMER_KEY')
+CONSUMER_SECRET = config('CONSUMER_SECRET')
+
+# safaricom credentials
+BUSINESS_SHORTCODE = config("SHORT_CODE")
+PASSKEY = config("PASSKEY")
+TIMESTAMP = datetime.now().strftime("%Y%m%d%H%M%S")

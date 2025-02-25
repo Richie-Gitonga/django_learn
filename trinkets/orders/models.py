@@ -7,6 +7,7 @@ class Order(models.Model):
     email = models.EmailField()
     address = models.CharField(max_length=250)
     city = models.CharField(max_length=100)
+    payment = models.CharField(max_length=250, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
@@ -46,5 +47,5 @@ class OrderItem(models.Model):
         return str(self.id)
     
     def get_cost(self):
-        return self.price * self.product.quantity
+        return self.price * self.quantity
     
