@@ -10,6 +10,9 @@ from django.conf import settings
 from orders.models import Order
 from .tasks import payment_complete
 
+from shop.models import Product
+from shop.recommend import Recommender
+
 business_shortcode = settings.BUSINESS_SHORTCODE
 passkey = settings.PASSKEY
 timestamp = settings.TIMESTAMP
@@ -76,5 +79,12 @@ def payment_process(request):
         payment_completed.delay(order.id)
         order.save()
 
-
+        # save items bought for product recommendation
+        product_ids = order.items.values_list(
+            'product_id'
+        )
+        products = Product.objects.filter(id__in=product_ids)
+        r = Recommender()
+        r.products_bought(products)
+    
     return render(request, 'payment/process.html')
