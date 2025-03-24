@@ -20,14 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)^%j*447lkk-$a(3=a3s)+e2ke7q%&dcj4pzuok&+ta-%b$*f$'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+SECRET_KEY = config("DJANGO_SECRET_KEY")
+ 
+DEBUG = bool(config("DEBUG", default=0))
+ 
+ # "Allowed_hosts" shouuld be a string of host with a , between each
+ # example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1, [::1]'
+ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
 # Application definition
 
@@ -81,11 +80,14 @@ WSGI_APPLICATION = 'bongohealth.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
+        'ENGINE': 'django.db.backends.{}'.format(
+            config('DB_ENGINE', 'sqlite3')
+        ),
+        'NAME': config('DB_NAME', BASE_DIR/"sqlite3"),
+        'USER': config('DB_USERNAME', "user"),
+        'PASSWORD': config('DB_PASSWORD', "password"),
+        'HOST': config('DB_HOST', "localhost"),
+        'PORT': config('DB_PORT', 5432)
     }
 }
 
