@@ -16,6 +16,8 @@ services:
   django-web:
     build: .
     container_name: bongohealth_web
+    volumes:
+      - static_volume:/bongohealth/staticfiles
     ports:
       - "8000:8000"
     depends_on:
@@ -35,3 +37,4 @@ services:
       - .env
 volumes:
   postgres_data:
+  static_volume:

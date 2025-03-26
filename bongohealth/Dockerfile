@@ -51,6 +51,6 @@ EXPOSE 8000
  
 # Copy the Django project to the container
 COPY . /bongohealth/
- 
+
 # Start the application using gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "bongohealth.wsgi:application"]

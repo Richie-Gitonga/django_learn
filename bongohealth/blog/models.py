@@ -3,6 +3,7 @@ from taggit.managers import TaggableManager
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django_prose_editor.fields import ProseEditorField
 
 # Create your models here.
 class PublishManager(models.Manager):
@@ -27,7 +28,7 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         related_name='blog_posts',
     )
-    body = models.TextField()
+    body = ProseEditorField()
     publish = models.DateTimeField(
         default=timezone.now
     )
@@ -42,10 +43,16 @@ class Post(models.Model):
         choices=Status,
         default=Status.DRAFT
     )
+    thumbnail = models.ImageField(
+        upload_to="thumbnails/",
+        blank=True,
+        null=True
+    )
 
     tags = TaggableManager()
     objects = models.Manager() #default manager
     published = PublishManager() #custom manager
+
     class Meta:
         ordering = ['-publish']
         indexes = [

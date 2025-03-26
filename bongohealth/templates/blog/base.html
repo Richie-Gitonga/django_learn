@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
+
+    {{ importmap }}
     <link rel="stylesheet" href="{% static 'css/blog.css'%}">
 </head>
 <body>
@@ -30,6 +32,8 @@
             </li>
             {% endfor %}
         </ul>
+        <br>
+        <a href="{% url "blog:post_create" %}">Create a new blog</a>
     </div>
     <div id="content">
         {% block content %}

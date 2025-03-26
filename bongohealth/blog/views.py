@@ -1,14 +1,32 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.core.mail import send_mail
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.views.decorators.http import require_POST
 from .models import Post
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from .forms import EmailPostForm, CommentForm, SearchForm
+from .forms import EmailPostForm, CommentForm, SearchForm, BlogPostForm
 from taggit.models import Tag
 from django.db.models import Count
 
 # Create your views here.
+def post_create(request):
+
+    if request.method == "POST":
+        form = BlogPostForm(data=request.POST)
+        if form.is_valid():
+            post = form.save()
+            post.save()
+            return redirect(post, permanent=True)
+    else:
+        form = BlogPostForm()
+
+    return render(
+        request,
+        'blog/post/create.html',
+        {"form": form}
+    )
+
+
 def post_list(request, tag_slug=None):
     post_list = Post.published.all()
     tag = None
