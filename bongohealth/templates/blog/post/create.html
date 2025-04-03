@@ -2,7 +2,7 @@
 {% load blog_tags %}
 {% block title %} Create Article {% endblock %}
 {% block content %}
-    <form>
+    <form class="flex flex-col justify-evenly">
         {{ form.errors }}
         {{ form.media }}
         {{ form.as_div }}

@@ -43,14 +43,15 @@ COPY --chown=appuser:appuser . .
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Switch to non-root user
-USER appuser
-
 # Expose the application port
 EXPOSE 8000
  
 # Copy the Django project to the container
 COPY . /bongohealth/
 
-# Start the application using gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "bongohealth.wsgi:application"]
+# Make the entrypoint script executable
+RUN chmod +x  /bongohealth/entrypoint.prod.sh
+
+# Set the entrypoint script as the default command
+# This will run migrations, collect static files, and start Gunicorn
+CMD ["/bongohealth/entrypoint.prod.sh"]
