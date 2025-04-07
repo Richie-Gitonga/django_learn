@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+{% block title %} Log-in {% endblock %}
+{% block content %}
+    <div class="w-full p-12 mx-auto">
+        <h1>Log-in</h1>
+        <p>Welcome Back!</p>
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <p>
+                <input type="submit" value="login">
+            </p>
+        </form>
+    </div>
+{% endblock %}

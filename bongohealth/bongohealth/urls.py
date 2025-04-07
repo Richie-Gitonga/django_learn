@@ -10,8 +10,9 @@ sitemaps = {
 }
 
 urlpatterns = [
+    path('', include('blog.urls', namespace='blog')),
+    path('auth/', include('users.urls', namespace='users')),
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls', namespace='blog')),
     path(
         'sitemap.xml',
         sitemap,
