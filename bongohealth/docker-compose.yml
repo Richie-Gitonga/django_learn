@@ -16,7 +16,9 @@ services:
   django-web:
     build: .
     container_name: bongohealth_web
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
+      - .:/usr/bongohealth
       - static_volume:/bongohealth/staticfiles
     ports:
       - "8000:8000"
@@ -34,7 +36,7 @@ services:
       DATABASE_HOST: ${DB_HOST}
       DATABASE_PORT: ${DB_PORT}
     env_file:
-      - .env
+      - .env.dev
 volumes:
   postgres_data:
   static_volume:

@@ -25,9 +25,10 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
  
 DEBUG = bool(config("DEBUG", default=0))
  
- # "Allowed_hosts" shouuld be a string of host with a , between each
- # example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1, [::1]'
-ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
+ # "Allowed_hosts" should be a string of host with a , between each
+ # example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
+ALLOWED_HOSTS = ['*']
+print(ALLOWED_HOSTS)
 
 # Application definition
 
