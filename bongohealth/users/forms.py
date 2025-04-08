@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django import forms
 from .models import Profile
 
@@ -27,6 +28,13 @@ class RegisterForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('Passwords do not match')
         return cd['password2']
+    
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email is already in use')
+        return email
+
 
 class EditProfileForm(forms.ModelForm):
     class Meta:
@@ -37,3 +45,13 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ['email', 'first_name', 'username', 'last_name']
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        u = User.objects.exclude(
+            id=self.instance.id
+        ).filter(email=email)
+        if u.exists():
+            raise forms.ValidationError('This email is already in use')
+        return email
+

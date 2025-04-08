@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponse
 from .forms import LoginForm, RegisterForm, EditUserForm, EditProfileForm
 from .models import Profile
@@ -86,6 +87,15 @@ def user_edit(request):
         if user_edit_form.is_valid and profile_edit_form.is_valid:
             user_edit_form.save()
             profile_edit_form.save()
+            messages.success(
+                request,
+                'Profile changed successfully'
+            )
+        else:
+            messages.error(
+                request,
+                'Error updating your profile'
+            )
 
     else:
         user_edit_form = EditUserForm(instance=request.user)
