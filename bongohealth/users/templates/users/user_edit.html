@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %}
+{% block title %} Edit Account {% endblock %}
+{% block content %} 
+    <h1>Edit Your Account</h1>
+    <form method="post">
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        {% csrf_token %}
+        <p>
+            <input type="submit" value="Save Changes">
+        </p>
+    </form>
+    <p>Already have an account? <a href="{% url "users:login" %}"> Log-in</a></p>
+{% endblock %}

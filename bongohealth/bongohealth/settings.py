@@ -28,7 +28,6 @@ DEBUG = bool(config("DEBUG", default=0))
  # "Allowed_hosts" should be a string of host with a , between each
  # example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
 ALLOWED_HOSTS = ['*']
-print(ALLOWED_HOSTS)
 
 # Application definition
 
@@ -159,6 +158,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 
 # Auth
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'users:dashboard'
+LOGIN_URL = 'users:login'
+LOGOUT_URL = 'users:logout'

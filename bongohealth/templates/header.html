@@ -28,7 +28,12 @@
 			x-on:keydown.esc.window="userDropDownIsOpen = false"
 			class="relative flex items-center"
 		>
-			{% if request.user.is_authenticated %}
+			{% if not request.user.is_authenticated %}
+			<a
+				href="{% url 'users:user_register' %}"
+				class="block bg-neutral px-4 py-2 mr-6 text-sm text-neutral-800 outline-1 outline-neutral-600 hover:bg-blue-50 hover:text-neutral-900 focus-visible:bg-neutral-900/10 focus-visible:text-neutral-900"
+				>Sign-in</a
+			>
 			<a
 				href="{% url 'users:login' %}"
 				class="block bg-neutral-50 px-4 py-2 text-sm text-neutral-600 hover:bg-neutral-900/5 hover:text-neutral-900 focus-visible:bg-neutral-900/10 focus-visible:text-neutral-900 focus-visible:outline-hidden"
@@ -75,13 +80,25 @@
                         {% endif %}
 						>Dashboard</a>
 				</li>
-				<li class="mt-4 w-full border-none">
+				<li>
 					<a
-						href="{% url 'users:logout' %}"
+                        {% if section == "profile" %}
+                        class="block bg-neutral-50 px-4 py-2 text-sm text-black hover:bg-neutral-900/5 hover:text-neutral-900 focus-visible:bg-neutral-900/10 focus-visible:text-neutral-900 focus-visible:outline-hidden"
+                        {% else %}
+                        class="block bg-neutral-50 px-4 py-2 text-sm text-black hover:bg-neutral-900/5 hover:text-neutral-900 focus-visible:bg-neutral-900/10 focus-visible:text-neutral-900 focus-visible:outline-hidden"
+                        {% endif %}
+						href="{% url "users:user_edit" %}"
+						>Profile</a>
+				</li>
+				<li class="mt-4 w-full border-none">
+					<form
+						action="{% url 'users:logout' %}"
+						method="post"
 						class="rounded-sm bg-black border border-black px-4 py-2 block text-center font-medium tracking-wide text-neutral-100 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0"
 					>
-						Sign Out</a
-					>
+						<input type="submit" value="logout">
+						{% csrf_token %}
+					</form>
 				</li>
 				{% endif %}
 			</ul>
