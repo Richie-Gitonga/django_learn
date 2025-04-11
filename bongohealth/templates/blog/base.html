@@ -20,71 +20,72 @@
         defer
         src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-		<style type="text/tailwindcss">
+	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+	<style type="text/tailwindcss">
 
-			h1 {
-				@apply text-2xl text-center my-5 font-semibold text-[#1a1a1a];
-			}
-			p {
-				@apply text-sm leading-6 tracking-wide;
-			}
-			.tag {
-				@apply text-xs px-4 py-2 bg-white font-semibold rounded-md cursor-pointer;
-			}
-			.tags > li > a {
-				@apply hover:bg-gray-200 px-4 py-2 rounded-sm;
-			}
+		h1 {
+			@apply text-2xl text-center my-5 font-semibold text-[#1a1a1a];
+		}
+		p {
+			@apply text-sm leading-6 tracking-wide;
+		}
+		.tag {
+			@apply text-xs px-4 py-2 bg-white font-semibold rounded-md cursor-pointer;
+		}
+		.tags > li > a {
+			@apply hover:bg-gray-200 px-4 py-2 rounded-sm;
+		}
 
-			.pages > li > a {
-				@apply px-4 py-2 mr-2 bg-blue-100 hover:bg-gray-400 [.active]:bg-gray-400
-			}
-			body {
-				font-family: "Poppins", sans-serif;
-				background-color: #fff;
-				color: #1f2937;
-			}
+		.pages > li > a {
+			@apply px-4 py-2 mr-2 bg-blue-100 hover:bg-gray-400 [.active]:bg-gray-400
+		}
+		body {
+			font-family: "Poppins", sans-serif;
+			color: #1f2937;
+			padding: 1.25rem 6.25rem;
+		}
 
-			.button {
-				background-color: #e1ecf4;
-				border-radius: 4px;
-				border: 1px solid #7aa7c7;
-				box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
-				box-sizing: border-box;
-				color: #39739d;
-				cursor: pointer;
-				display: inline-block;
-				margin: 12px 0;
-				outline: none;
-				padding: 6px 1.5em;
-				position: relative;
-				text-align: center;
-				text-decoration: none;
-				user-select: none;
-				-webkit-user-select: none;
-				touch-action: manipulation;
-				vertical-align: baseline;
-				white-space: nowrap;
-			}
+		.button {
+			background-color: #e1ecf4;
+			border-radius: 4px;
+			border: 1px solid #7aa7c7;
+			box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+			box-sizing: border-box;
+			color: #39739d;
+			cursor: pointer;
+			display: inline-block;
+			margin: 12px 0;
+			outline: none;
+			padding: 6px 1.5em;
+			position: relative;
+			text-align: center;
+			text-decoration: none;
+			user-select: none;
+			-webkit-user-select: none;
+			touch-action: manipulation;
+			vertical-align: baseline;
+			white-space: nowrap;
+		}
 
-			.button:hover,
-			.button:focus {
-				background-color: #b3d3ea;
-				color: #2c5777;
-			}
+		.button:hover,
+		.button:focus {
+			background-color: #b3d3ea;
+			color: #2c5777;
+		}
 
-			.button:focus {
-				box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
-			}
+		.button:focus {
+			box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+		}
 
-			.button:active {
-				background-color: #a0c7e4;
-				box-shadow: none;
-				color: #2c5777;
-			}
-        </style>
+		.button:active {
+			background-color: #a0c7e4;
+			box-shadow: none;
+			color: #2c5777;
+		}
+	</style>
 
 </head>
-<body class="">
+<body class="bg-blue-50">
 	{% include "header.html" %}
 	{% include "messages.html" %}
     <div>
@@ -102,7 +103,6 @@
 				<a class="button" href="{% url 'blog:post_feed' %}">
 					Subscribe to Feed
 				</a>
-				<a class="button" href="{% url "blog:post_create" %}">New Blog</a>
 			</div>
 			<div class="py-2">
 				<h3>Latest posts</h3>
@@ -121,5 +121,13 @@
 			</div>
 		</aside>
 	</div>
+
+	<script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+	<script>
+		const csrftoken = Cookies.get('csrftoken')
+		document.addEventListener('DomContentLoaded', (event) => {
+			{% block domready %}{% endblock %}
+		})
+	</script>
 </body>
 </html>

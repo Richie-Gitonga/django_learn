@@ -1,31 +1,39 @@
-{% extends "blog/base.html" %} {% load blog_tags %} {% block title %} {{
-post.title }} {% endblock %} {% block content %}
-<div class="w-full">
-	<article class="my-5 p-5">
-		<div class="flex flex-col items-center">
-			<ul class="tags flex items-center gap-5">
-				{% for tag in post.tags.all %}
-				<li class="tag">
-					<a href="{% url 'blog:post_list_by_tag' tag.slug%}">
-						{{ tag.name }}
-					</a>
-				</li>
-				{% endfor %}
-			</ul>
-			<h1>{{post.title}}</h1>
-			<p class="date text-center">
-				Published {{ post.publish }} by {{ post.author }}
-			</p>
-		</div>
-		<p class="my-5 text-md tracking-tight leading-4">
-			{{ post.body|markdown }}
+{% extends "blog/base.html" %} 
+{% load blog_tags %}
+{% block title %} {{ post.title }} {% endblock %} 
+{% block content %}
+<div>
+	<article class="flex flex-col items-center gap-2 w-full p-5">
+		<ul class="tags w-fit flex items-center gap-5">
+			{% for tag in post.tags.all %}
+			<li class="tag">
+				<a href="{% url 'blog:post_list_by_tag' tag.slug%}">
+					{{ tag.name }}
+				</a>
+			</li>
+			{% endfor %}
+		</ul>
+		<h1>{{post.title}}</h1>
+		{% if post.thumbnail %}
+		<img class="w-full max-w-3xl h-full max-h-sm" src="{{ post.thumbnail.url }}" alt="{{post.title}}">
+		{% endif %}
+		<p class="date text-xs text-slate-600">
+			Published {{ post.publish }} by {{ post.author }}
 		</p>
 	</article>
 
-	<a href="{% url 'blog:post_share' post.id %}" class="font-semibold flex items-center gap-4">
-        <img class="size-6" src="https://img.icons8.com/ios-glyphs/50/share--v1.png" alt="share--v1"/>
-		<p> Share this post </p>
-	</a>
+	<div class="lg:flex gap-4 mb-4">
+			<div class="w-full max-w-[20rem] p-2 flex items-center justify-evenly mx-auto">
+				{% include "snippets/like.html" %}
+				<a href="{% url 'blog:post_share' post.id %}" class="font-semibold flex items-center gap-4">
+					<img class="size-4" src="https://img.icons8.com/ios-glyphs/50/share--v1.png" alt="share--v1"/>
+					<p> Share </p>
+				</a>
+			</div>
+		<div class="w-full max-w-4xl my-5 p-2">
+			{{ post.body|markdown }}
+		</div>
+	</div>
 
 	<div>
 		<h2>Similar Posts</h2>

@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+{% block title %} Dashboard / {{ section }} {% endblock %}
+
+{% block content %}
+    {% comment %}
+        TODO:
+            Add a custom sidebar for the dashboard.
+            Change parent template to layout 
+    {% endcomment %}
+
+    <h1>{{ section }}</h1>
+    
+
+
+    <div class="w-full max-w-[40rem] mx-auto">
+        {% block main %}
+        
+        {% endblock  %}
+    </div>
+
+{% endblock %}

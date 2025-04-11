@@ -1,0 +1,30 @@
+{% comment %} Snippet for liking blogs {% endcomment %}
+
+<div>
+	{% with total_likes=post.likes.count user_liked=post.likes.all %}
+	<a
+		href="#"
+		class="cursor-pointer flex items-center gap-2"
+        hx-get="{% url "blog:post_like" post.id %}"
+        hx-target="this"
+        hx-swap="outerHTML"
+	>
+		{% if request.user not in user_liked %}
+		<img
+			class="size-4"
+			src="https://img.icons8.com/material-outlined/50/hearts.png"
+			alt="hearts"
+		/>
+		{% else %}
+		<img
+			class="size-4"
+			src="https://img.icons8.com/material-sharp/50/hearts.png"
+			alt="hearts"
+		/>
+		{% endif %}
+		<span class="count"
+			>{{ total_likes }}<span> like{{ total_likes|pluralize }}</span></span
+		>
+	</a>
+	{% endwith %}
+</div>

@@ -1,0 +1,37 @@
+{% extends "user/dashboard/base.html" %}
+
+{% block main %}
+    {% comment %}
+    TODO:
+        create a user profile section and add tags if user is an author
+        make dynamic for request.user / other users
+        create tabs for blogs, followers and following 
+    {% endcomment %}
+    <div>
+        <div>
+            {% comment %} profile section {% endcomment %}
+            <div>
+                {% if user.profile.photo %}
+                <img src="{{ user.profile.photo.url }}" alt={{ user.username }}>
+                {% else %}
+                <img src="{% static "images/profile.jpg" %}" alt={{ user.username }}>
+                {% endif %}
+                <div>
+                    <p>{{ user.get_full_name }}</p>
+                    {% with total_followers=user.followers.count %}
+                    <div>
+                        <span>
+                            {{ total_followers }}follower{{total_followers|pluralize}}
+                        </span>
+                    </div>
+                    {% comment %} add follow button <htmx> {% endcomment %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+{% endblock %}

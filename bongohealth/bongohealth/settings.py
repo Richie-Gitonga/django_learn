@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from django.urls import reverse_lazy
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'blog.apps.BlogConfig',
+    'activity.apps.ActivityConfig',
     'django_prose_editor',
     'taggit',
 ]
@@ -165,3 +167,11 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = 'users:dashboard'
 LOGIN_URL = 'users:login'
 LOGOUT_URL = 'users:logout'
+
+# overide absolute urls
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: reverse_lazy(
+        'users:user_detail',
+        args=[u.username]
+    )
+}

@@ -13,6 +13,9 @@ urlpatterns = [
     path('register/', views.user_register, name='user_register'),
     path('edit/', views.user_edit, name="user_edit"),
     path('', views.user_dashboard, name='dashboard'),
+    path('users/all/', views.user_list, name='user_list'),
+    path('users/<username>/', views.user_detail, name='user_detail'),
+    path('users/follow/<username>/', views.user_follow, name='user_follow'),
     # change password
     path(
         'password-change/',

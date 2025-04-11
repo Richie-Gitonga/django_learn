@@ -1,5 +1,6 @@
 from django.conf import settings
 from taggit.managers import TaggableManager
+from django.utils.text import slugify
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -44,9 +45,14 @@ class Post(models.Model):
         default=Status.DRAFT
     )
     thumbnail = models.ImageField(
-        upload_to="thumbnails/",
+        upload_to="thumbnails/%Y/%m/%d",
         blank=True,
         null=True
+    )
+    likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='liked_posts',
+        blank=True
     )
 
     tags = TaggableManager()
@@ -72,6 +78,12 @@ class Post(models.Model):
                 self.slug
             ]
         )
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
 
 class Comment(models.Model):
     post = models.ForeignKey(

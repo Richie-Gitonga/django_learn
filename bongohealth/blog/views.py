@@ -1,31 +1,14 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.mail import send_mail
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.views.decorators.http import require_POST
-from .models import Post
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from .forms import EmailPostForm, CommentForm, SearchForm, BlogPostForm
-from taggit.models import Tag
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-
-# Create your views here.
-def post_create(request):
-
-    if request.method == "POST":
-        form = BlogPostForm(data=request.POST)
-        if form.is_valid():
-            post = form.save()
-            post.save()
-            return redirect(post, permanent=True)
-    else:
-        form = BlogPostForm()
-
-    return render(
-        request,
-        'blog/post/create.html',
-        {"form": form}
-    )
-
+from taggit.models import Tag
+from activity.utils import create_action
+from .models import Post
+from .forms import EmailPostForm, CommentForm, SearchForm, BlogPostForm
 
 def post_list(request, tag_slug=None):
     post_list = Post.published.all()
@@ -102,32 +85,6 @@ def post_share(request, post_id):
         }
     )
 
-@require_POST
-def post_comment(request, post_id):
-    post = get_object_or_404(
-        Post,
-        id=post_id,
-        status=Post.Status.PUBLISHED
-    )
-    comment = None
-    # A comment was posted
-    form = CommentForm(data=request.POST)
-    if form.is_valid():
-        # Create a comment object without sending it to the database
-        comment = form.save(commit=False)
-        comment.post=post
-        comment.save()
-
-    return render(
-        request,
-        'blog/post/comment.html',
-        {
-            'post': post,
-            'form': form,
-            'comment': comment
-        }
-    )
-
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(
         Post,
@@ -160,6 +117,34 @@ def post_detail(request, year, month, day, post):
         }
     )
 
+@require_POST
+def post_comment(request, post_id):
+    post = get_object_or_404(
+        Post,
+        id=post_id,
+        status=Post.Status.PUBLISHED
+    )
+    comment = None
+    # A comment was posted
+    form = CommentForm(data=request.POST)
+    if form.is_valid():
+        # Create a comment object without sending it to the database
+        comment = form.save(commit=False)
+        comment.post=post
+        comment.save()
+        create_action(request.user, 'comment on', post)
+
+    return render(
+        request,
+        'blog/post/comment.html',
+        {
+            'post': post,
+            'form': form,
+            'comment': comment
+        }
+    )
+
+
 def post_search(request):
     form = SearchForm
     query = None
@@ -187,3 +172,21 @@ def post_search(request):
             'results': results
         }
     )
+
+@login_required
+def post_like(request, post_id):
+    post = get_object_or_404(
+        Post,
+        id=post_id
+    )
+    user_exists = post.likes.filter(
+        username=request.user.username
+    ).exists()
+
+    if not user_exists:
+        post.likes.add(request.user)
+        create_action(request.user, 'likes', post)
+    else:
+        post.likes.remove(request.user)
+
+    return render(request, "snippets/like.html", {'post': post})

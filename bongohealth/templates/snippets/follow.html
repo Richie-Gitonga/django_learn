@@ -1,0 +1,23 @@
+{% comment %} Follow/Unfollow users{% endcomment %}
+
+<div>
+    <a 
+        hx-get="{% url "users:user_follow" user.username %}"
+        hx-swap="outerHTML"
+        hx-target="this"
+    >
+        {% if request.user in user.followers.all %}
+        <span
+            class="cursor-pointer text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2"
+        >
+            Unfollow
+        </span>
+        {% else %}
+        <button
+            class="cursor-pointer text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
+        >
+            follow
+        </button>
+        {% endif %}
+    </a>
+</div>
